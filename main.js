@@ -1,4 +1,4 @@
-var TB = require("./TB.js");
+var TB = require("./old/TB.js");
 
 auto.waitFor();
 var tb = new TB();

@@ -1,0 +1,17 @@
+{
+  "name": "autojs",
+  "main": "main.js",
+  "ignore": [
+    "build"
+  ],
+  "scripts": {
+    "transform": "babel src  -d dist"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "6.24.1",
+    "babel-cli": "6.26.0"
+  },
+  "packageName": "com.example",
+  "versionName": "1.0.0",
+  "versionCode": 1
+}
