@@ -29,8 +29,8 @@ function endApp(packageName) {
 function launchOpenApp(packageName) {
     var onPackage = currentPackage() === packageName;
     if (!onPackage) {
-        (0, _log.ShowMessage)("打开" + appName);
-        launchApp(packageName);
+        (0, _log.ShowMessage)("打开" + packageName);
+        launch(packageName);
         sleep(3000);
         back();
     }

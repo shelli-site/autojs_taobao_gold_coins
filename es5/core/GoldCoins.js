@@ -146,11 +146,11 @@ var GoldCoins = function (_Task) {
             taskBtn.click();
             (0, _log.ShowMessage)("点击" + taskName);
             sleep(2000);
-            swipe(width / 2, height - 400, width / 2, 0, 1000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
             sleep(2000);
-            swipe(width / 2, height - 400, width / 2, 0, 1000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
             sleep(2000);
-            swipe(width / 2, height - 400, width / 2, 0, 1000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
             // 鉴于前面操作需要一部分时间，这里减少一些
             this.WaitVisitFinished(10000);
             this.go_back();
@@ -161,6 +161,7 @@ var GoldCoins = function (_Task) {
     }, {
         key: "PerformClick",
         value: function PerformClick(taskBtn, taskName) {
+            // todo 逛农场领免费水果，没写
             this.go_back();
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
@@ -168,6 +169,7 @@ var GoldCoins = function (_Task) {
     }, {
         key: "PerformLifeClick",
         value: function PerformLifeClick(taskBtn, taskName) {
+            // todo 淘宝人生逛街领能量，没写
             this.go_back();
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
