@@ -12,7 +12,7 @@ class Task {
          *
          * @type {*[]}
          */
-        this.CompletedTaskList = new Array();
+        this.CompletedTaskList = [];
     }
 
     /**
@@ -21,7 +21,8 @@ class Task {
     run() {
         this.init();
         this.checkAndGoActivity();
-        while (this.performTasks()) ;
+        while (this.performTasks()) {
+        }
         this.collectReward();
         this.end();
     }
@@ -45,43 +46,54 @@ class Task {
      */
     performTasks() {
         if (debug) ShowMessage("执行任务");
+        log(`获取任务列表`)
         let ActionsList = this.getTaskList()
-        let noTask = false, hasTask = true;
+        // hasTask 是否还有可完成任务
+        // recaptureTask 是否重新获取任务列表
+        let hasTask = false, recaptureTask = true;
         if (ActionsList) {
             let taskCounts = this.getTaskCounts(ActionsList);
             if (debug) ShowMessage("已获取" + taskCounts + "个任务")
-            for (var i = 0; hasTask && i < taskCounts; ++i) {
-                hasTask = false;
+            for (let i = 0; recaptureTask && i < taskCounts; ++i) {
+                recaptureTask = false;
                 let {taskBtn, taskText, taskName} = this.getSubtask(ActionsList, i);
-                if (taskBtn.text() == "领取奖励") {
+                if (taskBtn.text() === "领取奖励") {
                     taskBtn.click();
                     sleep(1000)
                 } else if (this.CompletedTaskList.indexOf(taskName) !== -1) {
-                    hasTask = true;
+                    recaptureTask = true;
                     continue;
                 } else {
                     if (debug) ShowMessage(`${taskName} ${taskText} ${taskBtn.text()}`)
                     this.doTask(taskBtn, taskText, taskName, () => {
-                        hasTask = true;
+                        recaptureTask = true;
                     });
                 }
                 this.CompletedTaskList.push(taskName);
             }
         }
-        if (!hasTask) noTask = true;
-        return noTask;
+        log("=======已完成任务列表=======")
+        this.CompletedTaskList.forEach((task, i) => log(`${i} - [${task}]`))
+        log("==========================")
+        if (!recaptureTask) {
+            log("所有任务已完成")
+            hasTask = true;
+        }
+        return hasTask;
     }
 
     /**
      * 领取奖励
      */
     collectReward() {
+        log(`领取奖励。`)
     }
 
     /**
      * 结束
      */
     end() {
+        log(`任务结束，关闭应用。`)
         endApp(this.packageName)
     }
 
@@ -105,6 +117,7 @@ class Task {
     /**
      * 获取子任务
      * @param ActionsList
+     * @param index
      * @returns {{taskBtn: *, taskName: *, taskText: *}}
      */
     getSubtask(ActionsList, index) {

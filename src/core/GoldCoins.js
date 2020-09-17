@@ -1,6 +1,6 @@
-import Task, {debug} from "./Task";
-import {ShowMessage} from "../utils/log";
-import {endApp, launchOpenApp} from "../utils/appUtils";
+import Task, { debug } from "./Task";
+import { ShowMessage } from "../utils/log";
+import { endApp, launchOpenApp, clickText } from "../utils/appUtils";
 
 // 获取设备屏幕信息
 const height = device.height;
@@ -29,12 +29,12 @@ class GoldCoins extends Task {
         switch (currentActivity()) {
             case this.Home_Activity:
                 ShowMessage("在主页，准备跳至淘金币页...");
-                this.HomeP_to_CoinsP();
+                clickText("领淘金币", [540, 960]);
                 sleep(3000);
                 ShowMessage("已跳至淘金币页！");
             case this.Coins_Activity:
                 ShowMessage("在淘金币页，准备跳至任务页...");
-                this.CoinsP_to_TasksP();
+                clickText("赚金币", [0, 0], "android.widget.Button");
                 ShowMessage("已跳至任务页！");
                 break;
             default:
@@ -64,21 +64,23 @@ class GoldCoins extends Task {
         taskName = Action.child(0).child(0).text();
         taskName = taskName.substring(0, taskName.length - 5);
         taskText = Action.child(0).child(1).text();
-        return {taskBtn, taskName, taskText}
+        return { taskBtn, taskName, taskText }
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {
-        if (taskBtn.text() == "已完成") {
-            ShowMessage(`${taskName} 已完成`);
+        if (taskBtn.text() === "已完成") {
+            ShowMessage(`【${taskName}】已完成`);
             repeatCallback();
+            return;
         }
-        ShowMessage(`执行 ${taskName} 任务`);
+        ShowMessage(`执行【${taskName}(${taskBtn.text()})】任务`);
         if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(taskText)) {
             this.PerformVisit(taskBtn, taskName);
         } else {
             switch (taskName) {
                 case "看免费小说领能量":
                 case "签到领取话费充值金":
+                case "签到领话费充值金":
                 case "逛好店领一大波金币":
                     this.PerformVisit(taskBtn, taskName);
                     break;
@@ -88,42 +90,37 @@ class GoldCoins extends Task {
                 case "淘宝人生逛街领能量":
                     this.PerformLifeClick(taskBtn, taskName);
                     break;
+                default:
+                    repeatCallback();
             }
         }
     }
 
-    HomeP_to_CoinsP() {
-        if (text("领淘金币").exists()) {
-            text("领淘金币").findOnce().click();
-        } else {
-            click(540, 960);
-        }
-    }
-
-    CoinsP_to_TasksP() {
-        var btn = className("android.widget.Button").text("赚金币");
-        if (btn.exists()) {
-            btn.findOnce().click();
-        }
+    collectReward() {
+        this.go_back();
+        clickText(/.*(领取)?淘?金币.*/)
     }
 
     PerformVisit(taskBtn, taskName) {
         if (!taskBtn) return;
         let actionName = taskBtn.text();
         taskBtn.click();
-        ShowMessage("点击" + taskName);
+        ShowMessage(`点击【${taskName}】`);
+        sleep(4000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第一次滑动")
         sleep(2000);
         gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第二次滑动")
         sleep(2000);
         gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-        sleep(2000);
-        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第三次滑动")
         // 鉴于前面操作需要一部分时间，这里减少一些
         this.WaitVisitFinished(10000);
         this.go_back();
         // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
         this.checkAndGoActivity();
-        if (debug) ShowMessage("完成" + actionName);
+        if (debug) ShowMessage(`完成【${actionName}】`);
     }
 
     PerformClick(taskBtn, taskName) {
@@ -152,7 +149,7 @@ class GoldCoins extends Task {
             Timer <= 15000 &&
             !descMatches("(.*)?任务已?完成(.*)?").exists() &&
             !textMatches("(.*)?任务已?完成(.*)?").exists()
-            ) {
+        ) {
             sleep(500);
             Timer += 500;
         }

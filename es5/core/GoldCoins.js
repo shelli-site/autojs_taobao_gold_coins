@@ -54,12 +54,12 @@ var GoldCoins = function (_Task) {
             switch (currentActivity()) {
                 case this.Home_Activity:
                     (0, _log.ShowMessage)("在主页，准备跳至淘金币页...");
-                    this.HomeP_to_CoinsP();
+                    (0, _appUtils.clickText)("领淘金币", [540, 960]);
                     sleep(3000);
                     (0, _log.ShowMessage)("已跳至淘金币页！");
                 case this.Coins_Activity:
                     (0, _log.ShowMessage)("在淘金币页，准备跳至任务页...");
-                    this.CoinsP_to_TasksP();
+                    (0, _appUtils.clickText)("赚金币", [0, 0], "android.widget.Button");
                     (0, _log.ShowMessage)("已跳至任务页！");
                     break;
                 default:
@@ -98,17 +98,19 @@ var GoldCoins = function (_Task) {
     }, {
         key: "doTask",
         value: function doTask(taskBtn, taskText, taskName, repeatCallback) {
-            if (taskBtn.text() == "已完成") {
-                (0, _log.ShowMessage)(taskName + " \u5DF2\u5B8C\u6210");
+            if (taskBtn.text() === "已完成") {
+                (0, _log.ShowMessage)("\u3010" + taskName + "\u3011\u5DF2\u5B8C\u6210");
                 repeatCallback();
+                return;
             }
-            (0, _log.ShowMessage)("\u6267\u884C " + taskName + " \u4EFB\u52A1");
+            (0, _log.ShowMessage)("\u6267\u884C\u3010" + taskName + "(" + taskBtn.text() + ")\u3011\u4EFB\u52A1");
             if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(taskText)) {
                 this.PerformVisit(taskBtn, taskName);
             } else {
                 switch (taskName) {
                     case "看免费小说领能量":
                     case "签到领取话费充值金":
+                    case "签到领话费充值金":
                     case "逛好店领一大波金币":
                         this.PerformVisit(taskBtn, taskName);
                         break;
@@ -118,25 +120,16 @@ var GoldCoins = function (_Task) {
                     case "淘宝人生逛街领能量":
                         this.PerformLifeClick(taskBtn, taskName);
                         break;
+                    default:
+                        repeatCallback();
                 }
             }
         }
     }, {
-        key: "HomeP_to_CoinsP",
-        value: function HomeP_to_CoinsP() {
-            if (text("领淘金币").exists()) {
-                text("领淘金币").findOnce().click();
-            } else {
-                click(540, 960);
-            }
-        }
-    }, {
-        key: "CoinsP_to_TasksP",
-        value: function CoinsP_to_TasksP() {
-            var btn = className("android.widget.Button").text("赚金币");
-            if (btn.exists()) {
-                btn.findOnce().click();
-            }
+        key: "collectReward",
+        value: function collectReward() {
+            this.go_back();
+            (0, _appUtils.clickText)(/.*(领取)?淘?金币.*/);
         }
     }, {
         key: "PerformVisit",
@@ -144,19 +137,22 @@ var GoldCoins = function (_Task) {
             if (!taskBtn) return;
             var actionName = taskBtn.text();
             taskBtn.click();
-            (0, _log.ShowMessage)("点击" + taskName);
+            (0, _log.ShowMessage)("\u70B9\u51FB\u3010" + taskName + "\u3011");
+            sleep(4000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第一次滑动");
             sleep(2000);
             gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第二次滑动");
             sleep(2000);
             gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-            sleep(2000);
-            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第三次滑动");
             // 鉴于前面操作需要一部分时间，这里减少一些
             this.WaitVisitFinished(10000);
             this.go_back();
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
-            if (_Task2.debug) (0, _log.ShowMessage)("完成" + actionName);
+            if (_Task2.debug) (0, _log.ShowMessage)("\u5B8C\u6210\u3010" + actionName + "\u3011");
         }
     }, {
         key: "PerformClick",

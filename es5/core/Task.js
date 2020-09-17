@@ -24,7 +24,7 @@ var Task = function () {
          *
          * @type {*[]}
          */
-        this.CompletedTaskList = new Array();
+        this.CompletedTaskList = [];
     }
 
     /**
@@ -70,37 +70,48 @@ var Task = function () {
         key: "performTasks",
         value: function performTasks() {
             if (debug) (0, _log.ShowMessage)("执行任务");
+            log("\u83B7\u53D6\u4EFB\u52A1\u5217\u8868");
             var ActionsList = this.getTaskList();
-            var noTask = false,
-                hasTask = true;
+            // hasTask 是否还有可完成任务
+            // recaptureTask 是否重新获取任务列表
+            var hasTask = false,
+                recaptureTask = true;
             if (ActionsList) {
                 var taskCounts = this.getTaskCounts(ActionsList);
                 if (debug) (0, _log.ShowMessage)("已获取" + taskCounts + "个任务");
-                for (var i = 0; hasTask && i < taskCounts; ++i) {
-                    hasTask = false;
+                for (var i = 0; recaptureTask && i < taskCounts; ++i) {
+                    recaptureTask = false;
 
                     var _getSubtask = this.getSubtask(ActionsList, i),
                         taskBtn = _getSubtask.taskBtn,
                         taskText = _getSubtask.taskText,
                         taskName = _getSubtask.taskName;
 
-                    if (taskBtn.text() == "领取奖励") {
+                    if (taskBtn.text() === "领取奖励") {
                         taskBtn.click();
                         sleep(1000);
                     } else if (this.CompletedTaskList.indexOf(taskName) !== -1) {
-                        hasTask = true;
+                        recaptureTask = true;
                         continue;
                     } else {
                         if (debug) (0, _log.ShowMessage)(taskName + " " + taskText + " " + taskBtn.text());
                         this.doTask(taskBtn, taskText, taskName, function () {
-                            hasTask = true;
+                            recaptureTask = true;
                         });
                     }
                     this.CompletedTaskList.push(taskName);
                 }
             }
-            if (!hasTask) noTask = true;
-            return noTask;
+            log("=======已完成任务列表=======");
+            this.CompletedTaskList.forEach(function (task, i) {
+                return log(i + " - [" + task + "]");
+            });
+            log("==========================");
+            if (!recaptureTask) {
+                log("所有任务已完成");
+                hasTask = true;
+            }
+            return hasTask;
         }
 
         /**
@@ -109,7 +120,9 @@ var Task = function () {
 
     }, {
         key: "collectReward",
-        value: function collectReward() {}
+        value: function collectReward() {
+            log("\u9886\u53D6\u5956\u52B1\u3002");
+        }
 
         /**
          * 结束
@@ -118,6 +131,7 @@ var Task = function () {
     }, {
         key: "end",
         value: function end() {
+            log("\u4EFB\u52A1\u7ED3\u675F\uFF0C\u5173\u95ED\u5E94\u7528\u3002");
             (0, _appUtils.endApp)(this.packageName);
         }
 
@@ -147,6 +161,7 @@ var Task = function () {
         /**
          * 获取子任务
          * @param ActionsList
+         * @param index
          * @returns {{taskBtn: *, taskName: *, taskText: *}}
          */
 

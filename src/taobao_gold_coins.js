@@ -1,5 +1,9 @@
-import GoldCoins from "./core/GoldCoins";
-
 auto.waitFor();
-let tb = new GoldCoins();
-tb.run();
+let tao_jin_bi = new GoldCoins();
+let shop_jin_bi = new ShopTask();
+
+tao_jin_bi.end = () => {
+    shop_jin_bi.run();
+}
+tao_jin_bi.run();
+

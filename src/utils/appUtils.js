@@ -1,4 +1,4 @@
-import {ShowMessage} from "./log";
+import { ShowMessage } from "./log";
 
 
 /**
@@ -11,7 +11,6 @@ export function endApp(packageName) {
     click(360, 2280);
     sleep(1000);
     clickText("确定", [800, 2250]);
-    sleep(500);
     back();
 }
 
@@ -28,12 +27,15 @@ export function launchOpenApp(packageName) {
     }
 }
 
-export function clickText(str, coordinate) {
-    var btn = text(str);
+export function clickText(str, coordinate = [0, 0], class_name = undefined) {
+    let reg = str instanceof RegExp ? str : new RegExp(`.*${str}.*`);
+    let btn = class_name ? className(class_name).textMatches(reg) : textMatches(reg);
     if (btn.exists()) {
-        log(btn.findOnce())
+        log(`点击【${reg}】按钮`)
         btn.findOnce().click();
+        sleep(2000);
     } else {
+        log("没有找到按钮，点击传入坐标")
         click(coordinate[0], coordinate[1])
     }
 }
