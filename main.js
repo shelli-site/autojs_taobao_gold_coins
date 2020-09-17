@@ -1,10 +1,10 @@
 "use strict";
 
-var _GoldCoins = require("./core/GoldCoins");
+var _GoldCoins = require("./es5/core/GoldCoins");
 
 var _GoldCoins2 = _interopRequireDefault(_GoldCoins);
 
-var _ShopTask = require("./core/ShopTask");
+var _ShopTask = require("./es5/core/ShopTask");
 
 var _ShopTask2 = _interopRequireDefault(_ShopTask);
 
