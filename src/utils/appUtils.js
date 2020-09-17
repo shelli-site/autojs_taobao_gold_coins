@@ -21,8 +21,8 @@ export function endApp(packageName) {
 export function launchOpenApp(packageName) {
     let onPackage = currentPackage() === packageName;
     if (!onPackage) {
-        ShowMessage("打开" + appName)
-        launchApp(packageName);
+        ShowMessage("打开" + packageName)
+        launch(packageName);
         sleep(3000);
         back();
     }

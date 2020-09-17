@@ -1,5 +1,5 @@
 import {ShowMessage} from "../utils/log";
-import {endApp} from "../utils/appUtils";
+import {endApp, launchOpenApp} from "../utils/appUtils";
 
 export const debug = false;
 
@@ -50,13 +50,13 @@ class Task {
         if (ActionsList) {
             let taskCounts = this.getTaskCounts(ActionsList);
             if (debug) ShowMessage("已获取" + taskCounts + "个任务")
-            for (var i = 0; hasTask && i < NBChild; ++i) {
+            for (var i = 0; hasTask && i < taskCounts; ++i) {
                 hasTask = false;
                 let {taskBtn, taskText, taskName} = this.getSubtask(ActionsList, i);
                 if (taskBtn.text() == "领取奖励") {
-                    ActBtn.click();
+                    taskBtn.click();
                     sleep(1000)
-                } else if (this.CompletedTaskList.includes(taskName)) {
+                } else if (this.CompletedTaskList.indexOf(taskName) !== -1) {
                     hasTask = true;
                     continue;
                 } else {

@@ -61,8 +61,9 @@ class GoldCoins extends Task {
         let taskBtn, taskName, taskText;
         let Action = ActionsList.child(index);
         taskBtn = Action.child(1);
-        taskName = Action.child(0).child(1).text();
-        taskText = Action.child(0).child(0).text();
+        taskName = Action.child(0).child(0).text();
+        taskName = taskName.substring(0, taskName.length - 5);
+        taskText = Action.child(0).child(1).text();
         return {taskBtn, taskName, taskText}
     }
 
@@ -72,8 +73,8 @@ class GoldCoins extends Task {
             repeatCallback();
         }
         ShowMessage(`执行 ${taskName} 任务`);
-        if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(ActText)) {
-            PerformVisit(taskBtn, taskName);
+        if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(taskText)) {
+            this.PerformVisit(taskBtn, taskName);
         } else {
             switch (taskName) {
                 case "看免费小说领能量":
@@ -112,17 +113,31 @@ class GoldCoins extends Task {
         taskBtn.click();
         ShowMessage("点击" + taskName);
         sleep(2000);
-        swipe(width / 2, height - 400, width / 2, 0, 1000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
         sleep(2000);
-        swipe(width / 2, height - 400, width / 2, 0, 1000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
         sleep(2000);
-        swipe(width / 2, height - 400, width / 2, 0, 1000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
         // 鉴于前面操作需要一部分时间，这里减少一些
         this.WaitVisitFinished(10000);
         this.go_back();
         // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
         this.checkAndGoActivity();
         if (debug) ShowMessage("完成" + actionName);
+    }
+
+    PerformClick(taskBtn, taskName) {
+        // todo 逛农场领免费水果，没写
+        this.go_back();
+        // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+        this.checkAndGoActivity();
+    }
+
+    PerformLifeClick(taskBtn, taskName) {
+        // todo 淘宝人生逛街领能量，没写
+        this.go_back();
+        // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+        this.checkAndGoActivity();
     }
 
     /**

@@ -1,0 +1,10 @@
+{
+    "name": "autojs_taobao_gold_coins",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.example",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}

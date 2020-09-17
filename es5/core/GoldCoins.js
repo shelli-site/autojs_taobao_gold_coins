@@ -90,8 +90,9 @@ var GoldCoins = function (_Task) {
                 taskText = void 0;
             var Action = ActionsList.child(index);
             taskBtn = Action.child(1);
-            taskName = Action.child(0).child(1).text();
-            taskText = Action.child(0).child(0).text();
+            taskName = Action.child(0).child(0).text();
+            taskName = taskName.substring(0, taskName.length - 5);
+            taskText = Action.child(0).child(1).text();
             return { taskBtn: taskBtn, taskName: taskName, taskText: taskText };
         }
     }, {
@@ -102,8 +103,8 @@ var GoldCoins = function (_Task) {
                 repeatCallback();
             }
             (0, _log.ShowMessage)("\u6267\u884C " + taskName + " \u4EFB\u52A1");
-            if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(ActText)) {
-                PerformVisit(taskBtn, taskName);
+            if (/.*(逛|浏览)?\d+[s|秒](立得)?.*/.test(taskText)) {
+                this.PerformVisit(taskBtn, taskName);
             } else {
                 switch (taskName) {
                     case "看免费小说领能量":
@@ -156,6 +157,20 @@ var GoldCoins = function (_Task) {
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
             if (_Task2.debug) (0, _log.ShowMessage)("完成" + actionName);
+        }
+    }, {
+        key: "PerformClick",
+        value: function PerformClick(taskBtn, taskName) {
+            this.go_back();
+            // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+            this.checkAndGoActivity();
+        }
+    }, {
+        key: "PerformLifeClick",
+        value: function PerformLifeClick(taskBtn, taskName) {
+            this.go_back();
+            // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+            this.checkAndGoActivity();
         }
 
         /**

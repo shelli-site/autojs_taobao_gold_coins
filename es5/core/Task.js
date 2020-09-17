@@ -49,7 +49,7 @@ var Task = function () {
     }, {
         key: "init",
         value: function init() {
-            launchOpenApp(this.packageName);
+            (0, _appUtils.launchOpenApp)(this.packageName);
         }
 
         /**
@@ -76,7 +76,7 @@ var Task = function () {
             if (ActionsList) {
                 var taskCounts = this.getTaskCounts(ActionsList);
                 if (debug) (0, _log.ShowMessage)("已获取" + taskCounts + "个任务");
-                for (var i = 0; hasTask && i < NBChild; ++i) {
+                for (var i = 0; hasTask && i < taskCounts; ++i) {
                     hasTask = false;
 
                     var _getSubtask = this.getSubtask(ActionsList, i),
@@ -85,9 +85,9 @@ var Task = function () {
                         taskName = _getSubtask.taskName;
 
                     if (taskBtn.text() == "领取奖励") {
-                        ActBtn.click();
+                        taskBtn.click();
                         sleep(1000);
-                    } else if (this.CompletedTaskList.includes(taskName)) {
+                    } else if (this.CompletedTaskList.indexOf(taskName) !== -1) {
                         hasTask = true;
                         continue;
                     } else {
