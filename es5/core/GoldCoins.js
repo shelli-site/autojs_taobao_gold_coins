@@ -143,37 +143,6 @@ var GoldCoins = function (_Task) {
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
         }
-
-        /**
-         * 返回
-         */
-
-    }, {
-        key: "go_back",
-        value: function go_back() {
-            var activity = currentActivity();
-            back();
-            sleep(1500);
-            var _activity = currentActivity();
-            if (activity === _activity) {
-                var back_btns = textMatches(".*(返回|离开|淘宝).*").find();
-                if (back_btns.nonEmpty()) {
-                    if (back_btns.findOne(textMatches(".*(返回|离开).*")) != null) {
-                        back_btns.findOne(textMatches(".*(返回|离开).*")).click();
-                    } else if (back_btns.findOne(textMatches(".*淘宝.*")) != null) {
-                        back_btns.findOne(textMatches(".*淘宝.*")).click();
-                    }
-                } else {
-                    toast("没找到╭(╯^╰)╮");
-                    (0, _appUtils.endApp)(this.packageName);
-                    sleep(1000);
-                    (0, _appUtils.launchOpenApp)(this.packageName);
-                    sleep(1000);
-                }
-            } else {
-                return;
-            }
-        }
     }]);
 
     return GoldCoins;
