@@ -6,13 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _GoldCoins2 = require("./GoldCoins");
-
-var _GoldCoins3 = _interopRequireDefault(_GoldCoins2);
-
 var _log = require("../utils/log");
 
 var _appUtils = require("../utils/appUtils");
+
+var _Task2 = require("./Task");
+
+var _Task3 = _interopRequireDefault(_Task2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22,8 +22,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ShopTask = function (_GoldCoins) {
-    _inherits(ShopTask, _GoldCoins);
+var ShopTask = function (_Task) {
+    _inherits(ShopTask, _Task);
 
     function ShopTask() {
         _classCallCheck(this, ShopTask);
@@ -31,6 +31,8 @@ var ShopTask = function (_GoldCoins) {
         var _this2 = _possibleConstructorReturn(this, (ShopTask.__proto__ || Object.getPrototypeOf(ShopTask)).call(this));
 
         _this2.Tasks_Activity = "com.taobao.weex.WXActivity";
+        _this2.Home_Activity = "com.taobao.tao.TBMainActivity";
+        _this2.Coins_Activity = "com.taobao.browser.BrowserActivity";
         return _this2;
     }
 
@@ -76,10 +78,17 @@ var ShopTask = function (_GoldCoins) {
         key: "getTaskList",
         value: function getTaskList() {
             var list = className("android.widget.FrameLayout").column(-1).depth(3).clickable(true).find();
-            log(list.length);
+            var effectiveList = list.filter(function (s) {
+                return s.childCount && s.childCount() === 1;
+            }).map(function (s) {
+                return s.child(0).desc() === "逛10秒+10";
+            });
             list = list.filter(function (s) {
                 return s.childCount && s.childCount() === 3;
+            }).filter(function (s, i) {
+                return effectiveList[i];
             });
+            log(list.length);
             return list;
         }
     }, {
@@ -97,7 +106,7 @@ var ShopTask = function (_GoldCoins) {
     }, {
         key: "doTask",
         value: function doTask(taskBtn, taskText, taskName, repeatCallback) {
-            this.PerformVisit(taskBtn, taskName);
+            this.PerformVisit(taskBtn, taskName, 5000);
         }
     }, {
         key: "collectReward",
@@ -105,6 +114,6 @@ var ShopTask = function (_GoldCoins) {
     }]);
 
     return ShopTask;
-}(_GoldCoins3.default);
+}(_Task3.default);
 
 exports.default = ShopTask;

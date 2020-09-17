@@ -22,10 +22,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// 获取设备屏幕信息
-var height = device.height;
-var width = device.width;
-
 var GoldCoins = function (_Task) {
     _inherits(GoldCoins, _Task);
 
@@ -132,29 +128,6 @@ var GoldCoins = function (_Task) {
             (0, _appUtils.clickText)(/.*(领取)?淘?金币.*/);
         }
     }, {
-        key: "PerformVisit",
-        value: function PerformVisit(taskBtn, taskName) {
-            if (!taskBtn) return;
-            var actionName = taskBtn.text();
-            taskBtn.click();
-            (0, _log.ShowMessage)("\u70B9\u51FB\u3010" + taskName + "\u3011");
-            sleep(4000);
-            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-            log("第一次滑动");
-            sleep(2000);
-            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-            log("第二次滑动");
-            sleep(2000);
-            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-            log("第三次滑动");
-            // 鉴于前面操作需要一部分时间，这里减少一些
-            this.WaitVisitFinished(10000);
-            this.go_back();
-            // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
-            this.checkAndGoActivity();
-            if (_Task2.debug) (0, _log.ShowMessage)("\u5B8C\u6210\u3010" + actionName + "\u3011");
-        }
-    }, {
         key: "PerformClick",
         value: function PerformClick(taskBtn, taskName) {
             // todo 逛农场领免费水果，没写
@@ -169,25 +142,6 @@ var GoldCoins = function (_Task) {
             this.go_back();
             // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
             this.checkAndGoActivity();
-        }
-
-        /**
-         *  等待访问操作完成（通过搜索关键字）
-         *
-         * @param Timeout 超时值（默认为15s）
-         */
-
-    }, {
-        key: "WaitVisitFinished",
-        value: function WaitVisitFinished() {
-            var Timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 15000;
-
-            var Timer = 0;
-            // 这个等待最多15s
-            while (Timer <= 15000 && !descMatches("(.*)?任务已?完成(.*)?").exists() && !textMatches("(.*)?任务已?完成(.*)?").exists()) {
-                sleep(500);
-                Timer += 500;
-            }
         }
 
         /**

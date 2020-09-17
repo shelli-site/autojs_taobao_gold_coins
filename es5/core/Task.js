@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.debug = undefined;
+exports.width = exports.height = exports.debug = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -14,6 +14,9 @@ var _appUtils = require("../utils/appUtils");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var debug = exports.debug = false;
+// 获取设备屏幕信息
+var height = exports.height = device.height;
+var width = exports.width = device.width;
 
 var Task = function () {
     function Task() {
@@ -183,6 +186,59 @@ var Task = function () {
         key: "doTask",
         value: function doTask(taskBtn, taskText, taskName, repeatCallback) {
             throw new Error("请实现[doTask]方法");
+        }
+
+        /**
+         * 滑动浏览
+         * @param taskBtn
+         * @param taskName
+         * @param timeout
+         * @constructor
+         */
+
+    }, {
+        key: "PerformVisit",
+        value: function PerformVisit(taskBtn, taskName) {
+            var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
+
+            if (!taskBtn) return;
+            var actionName = taskBtn.text();
+            taskBtn.click();
+            (0, _log.ShowMessage)("\u70B9\u51FB\u3010" + taskName + "\u3011");
+            sleep(4000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第一次滑动");
+            sleep(2000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第二次滑动");
+            sleep(2000);
+            gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+            log("第三次滑动");
+            // 鉴于前面操作需要一部分时间，这里减少一些
+            this.WaitVisitFinished(timeout);
+            this.go_back();
+            // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+            this.checkAndGoActivity();
+            if (debug) (0, _log.ShowMessage)("\u5B8C\u6210\u3010" + actionName + "\u3011");
+        }
+
+        /**
+         *  等待访问操作完成（通过搜索关键字）
+         *
+         * @param Timeout 超时值（默认为15s）
+         */
+
+    }, {
+        key: "WaitVisitFinished",
+        value: function WaitVisitFinished() {
+            var Timeout = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 15000;
+
+            var Timer = 0;
+            // 这个等待最多15s
+            while (Timer <= 15000 && !descMatches("(.*)?任务已?完成(.*)?").exists() && !textMatches("(.*)?任务已?完成(.*)?").exists()) {
+                sleep(500);
+                Timer += 500;
+            }
         }
     }]);
 

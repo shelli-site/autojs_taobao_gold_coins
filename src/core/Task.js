@@ -2,6 +2,9 @@ import {ShowMessage} from "../utils/log";
 import {endApp, launchOpenApp} from "../utils/appUtils";
 
 export const debug = false;
+// 获取设备屏幕信息
+export const height = device.height;
+export const width = device.width;
 
 class Task {
 
@@ -133,6 +136,53 @@ class Task {
      */
     doTask(taskBtn, taskText, taskName, repeatCallback) {
         throw new Error("请实现[doTask]方法");
+    }
+
+    /**
+     * 滑动浏览
+     * @param taskBtn
+     * @param taskName
+     * @param timeout
+     * @constructor
+     */
+    PerformVisit(taskBtn, taskName, timeout = 10000) {
+        if (!taskBtn) return;
+        let actionName = taskBtn.text();
+        taskBtn.click();
+        ShowMessage(`点击【${taskName}】`);
+        sleep(4000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第一次滑动")
+        sleep(2000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第二次滑动")
+        sleep(2000);
+        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
+        log("第三次滑动")
+        // 鉴于前面操作需要一部分时间，这里减少一些
+        this.WaitVisitFinished(timeout);
+        this.go_back();
+        // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
+        this.checkAndGoActivity();
+        if (debug) ShowMessage(`完成【${actionName}】`);
+    }
+
+    /**
+     *  等待访问操作完成（通过搜索关键字）
+     *
+     * @param Timeout 超时值（默认为15s）
+     */
+    WaitVisitFinished(Timeout = 15000) {
+        let Timer = 0
+        // 这个等待最多15s
+        while (
+            Timer <= 15000 &&
+            !descMatches("(.*)?任务已?完成(.*)?").exists() &&
+            !textMatches("(.*)?任务已?完成(.*)?").exists()
+            ) {
+            sleep(500);
+            Timer += 500;
+        }
     }
 }
 

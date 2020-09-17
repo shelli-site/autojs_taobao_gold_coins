@@ -1,11 +1,13 @@
-import GoldCoins from "./GoldCoins";
 import {ShowMessage} from "../utils/log";
 import {clickText, endApp, launchOpenApp} from "../utils/appUtils";
+import Task from "./Task";
 
-class ShopTask extends GoldCoins {
+class ShopTask extends Task {
     constructor() {
         super();
-        this.Tasks_Activity = "com.taobao.weex.WXActivity"
+        this.Tasks_Activity = "com.taobao.weex.WXActivity";
+        this.Home_Activity = "com.taobao.tao.TBMainActivity";
+        this.Coins_Activity = "com.taobao.browser.BrowserActivity";
     }
 
     checkAndGoActivity() {
@@ -46,8 +48,9 @@ class ShopTask extends GoldCoins {
 
     getTaskList() {
         let list = className("android.widget.FrameLayout").column(-1).depth(3).clickable(true).find();
+        let effectiveList = list.filter(s => s.childCount && (s.childCount() === 1)).map(s => s.child(0).desc() === "逛10秒+10")
+        list = list.filter(s => s.childCount && (s.childCount() === 3)).filter((s, i) => effectiveList[i])
         log(list.length)
-        list = list.filter(s => s.childCount && (s.childCount() === 3))
         return list;
     }
 
@@ -61,11 +64,10 @@ class ShopTask extends GoldCoins {
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {
-        this.PerformVisit(taskBtn, taskName);
+        this.PerformVisit(taskBtn, taskName, 5000);
     }
 
     collectReward() {
-
     }
 }
 

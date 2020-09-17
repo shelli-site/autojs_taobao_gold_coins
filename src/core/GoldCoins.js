@@ -1,14 +1,9 @@
-import Task, { debug } from "./Task";
-import { ShowMessage } from "../utils/log";
-import { endApp, launchOpenApp, clickText } from "../utils/appUtils";
+import Task, {debug} from "./Task";
+import {ShowMessage} from "../utils/log";
+import {endApp, launchOpenApp, clickText} from "../utils/appUtils";
 
-// 获取设备屏幕信息
-const height = device.height;
-const width = device.width;
 
 class GoldCoins extends Task {
-
-
     constructor() {
         super();
         /**
@@ -19,7 +14,6 @@ class GoldCoins extends Task {
         this.Home_Activity = "com.taobao.tao.TBMainActivity";
         this.Coins_Activity = "com.taobao.browser.BrowserActivity";
     }
-
 
     checkAndGoActivity() {
         let _this = this;
@@ -64,7 +58,7 @@ class GoldCoins extends Task {
         taskName = Action.child(0).child(0).text();
         taskName = taskName.substring(0, taskName.length - 5);
         taskText = Action.child(0).child(1).text();
-        return { taskBtn, taskName, taskText }
+        return {taskBtn, taskName, taskText}
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {
@@ -101,28 +95,6 @@ class GoldCoins extends Task {
         clickText(/.*(领取)?淘?金币.*/)
     }
 
-    PerformVisit(taskBtn, taskName) {
-        if (!taskBtn) return;
-        let actionName = taskBtn.text();
-        taskBtn.click();
-        ShowMessage(`点击【${taskName}】`);
-        sleep(4000);
-        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-        log("第一次滑动")
-        sleep(2000);
-        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-        log("第二次滑动")
-        sleep(2000);
-        gesture(1000, [width / 2, height - 400], [width / 2, 0], [width / 2, height - 400]);
-        log("第三次滑动")
-        // 鉴于前面操作需要一部分时间，这里减少一些
-        this.WaitVisitFinished(10000);
-        this.go_back();
-        // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
-        this.checkAndGoActivity();
-        if (debug) ShowMessage(`完成【${actionName}】`);
-    }
-
     PerformClick(taskBtn, taskName) {
         // todo 逛农场领免费水果，没写
         this.go_back();
@@ -135,24 +107,6 @@ class GoldCoins extends Task {
         this.go_back();
         // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
         this.checkAndGoActivity();
-    }
-
-    /**
-     *  等待访问操作完成（通过搜索关键字）
-     *
-     * @param Timeout 超时值（默认为15s）
-     */
-    WaitVisitFinished(Timeout = 15000) {
-        let Timer = 0
-        // 这个等待最多15s
-        while (
-            Timer <= 15000 &&
-            !descMatches("(.*)?任务已?完成(.*)?").exists() &&
-            !textMatches("(.*)?任务已?完成(.*)?").exists()
-        ) {
-            sleep(500);
-            Timer += 500;
-        }
     }
 
     /**
