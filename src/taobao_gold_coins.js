@@ -1,3 +1,6 @@
+import GoldCoins from "./core/GoldCoins";
+import ShopTask from "./core/ShopTask";
+
 auto.waitFor();
 let tao_jin_bi = new GoldCoins();
 let shop_jin_bi = new ShopTask();
