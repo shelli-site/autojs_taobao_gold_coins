@@ -1,18 +1,19 @@
+为了达到复用，改用ES6语法编写，通过babel插件编译成ES5语法。
 
-##### 主流程
+## Task.js 核心流程
 ```flow {align="center"}
 # 下面是赋值语句
-Init=>start: 初始化
-CheckAndGoActivity=>operation: 进入指定活动界面|past
-PerformTaskerActions=>operation: 执行日常任务
+init=>start: 初始化
+checkAndGoActivity=>operation: 进入指定活动界面|past
+performTasks=>operation: 执行日常任务
 TaskerDone=>condition: 日常任务
 是否全部完成?
-PerformCollectCoinsActions=>operation: 领取金币
-End=>end: 结束|
+collectReward=>operation: 领取金币
+end=>end: 结束|
 
 # 下面是连接语句
-Init->CheckAndGoActivity->PerformTaskerActions->TaskerDone
-TaskerDone(yes)->PerformCollectCoinsActions->End
-TaskerDone(no)->PerformTaskerActions
+init->checkAndGoActivity->performTasks->TaskerDone
+TaskerDone(yes)->collectReward->end
+TaskerDone(no)->performTasks
 ```
 
