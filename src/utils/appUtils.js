@@ -31,7 +31,7 @@ export function clickText(str, coordinate = [0, 0], class_name = undefined) {
     let reg = str instanceof RegExp ? str : new RegExp(`.*${str}.*`);
     let btn = class_name ? className(class_name).textMatches(reg) : textMatches(reg);
     if (btn.exists()) {
-        log(`点击【${reg}】按钮`)
+        log(`点击【${reg}】按钮(${btn.find().length})`)
         btn.findOnce().click();
         sleep(2000);
     } else {

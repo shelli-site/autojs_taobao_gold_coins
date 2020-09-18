@@ -46,7 +46,7 @@ var GoldCoins = function (_Task) {
             var _this = this;
             sleep(4000);
             if (isOnCorrectPage()) return;
-
+            log(currentActivity());
             switch (currentActivity()) {
                 case this.Home_Activity:
                     (0, _log.ShowMessage)("在主页，准备跳至淘金币页...");
@@ -125,7 +125,10 @@ var GoldCoins = function (_Task) {
         key: "collectReward",
         value: function collectReward() {
             this.go_back();
-            (0, _appUtils.clickText)(/.*(领取)?淘?金币.*/);
+            sleep(1500);
+            var btn = className("android.widget.Button").depth(10).textMatches(/.*(领取)?淘?金币.*/).drawingOrder(0).clickable(true).longClickable(false);
+            if (btn.find().length > 1) btn.findOne().click();
+            sleep(1500);
         }
     }, {
         key: "PerformClick",

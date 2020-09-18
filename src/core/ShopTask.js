@@ -1,5 +1,5 @@
-import {ShowMessage} from "../utils/log";
-import {clickText, endApp, launchOpenApp} from "../utils/appUtils";
+import { ShowMessage } from "../utils/log";
+import { clickText, endApp, launchOpenApp } from "../utils/appUtils";
 import Task from "./Task";
 
 class ShopTask extends Task {
@@ -14,7 +14,7 @@ class ShopTask extends Task {
         let _this = this;
         sleep(4000);
         if (isOnCorrectPage()) return;
-
+        log(currentActivity())
         switch (currentActivity()) {
             case this.Home_Activity:
                 ShowMessage("在主页，准备跳至淘金币页...");
@@ -23,7 +23,7 @@ class ShopTask extends Task {
                 ShowMessage("已跳至淘金币页！");
             case this.Coins_Activity:
                 ShowMessage("在淘金币页，准备跳至任务页...");
-                className("android.view.View").depth(10).drawingOrder(0).find().get(1).child(0).click();
+                className("android.view.View").depth(10).drawingOrder(0).clickable(false).find().filter(e => e.childCount() === 1)[1].child(0).click();
                 ShowMessage("已跳至任务页！");
                 break;
             default:
@@ -60,7 +60,7 @@ class ShopTask extends Task {
         taskBtn = Action;
         taskName = Action.child(0).desc();
         taskText = "";
-        return {taskBtn, taskName, taskText}
+        return { taskBtn, taskName, taskText }
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {

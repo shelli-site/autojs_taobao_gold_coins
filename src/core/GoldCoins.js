@@ -1,6 +1,6 @@
-import Task, {debug} from "./Task";
-import {ShowMessage} from "../utils/log";
-import {endApp, launchOpenApp, clickText} from "../utils/appUtils";
+import Task, { debug } from "./Task";
+import { ShowMessage } from "../utils/log";
+import { endApp, launchOpenApp, clickText } from "../utils/appUtils";
 
 
 class GoldCoins extends Task {
@@ -19,7 +19,7 @@ class GoldCoins extends Task {
         let _this = this;
         sleep(4000);
         if (isOnCorrectPage()) return;
-
+        log(currentActivity())
         switch (currentActivity()) {
             case this.Home_Activity:
                 ShowMessage("在主页，准备跳至淘金币页...");
@@ -58,7 +58,7 @@ class GoldCoins extends Task {
         taskName = Action.child(0).child(0).text();
         taskName = taskName.substring(0, taskName.length - 5);
         taskText = Action.child(0).child(1).text();
-        return {taskBtn, taskName, taskText}
+        return { taskBtn, taskName, taskText }
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {
@@ -92,7 +92,11 @@ class GoldCoins extends Task {
 
     collectReward() {
         this.go_back();
-        clickText(/.*(领取)?淘?金币.*/)
+        sleep(1500);
+        let btn = className("android.widget.Button").depth(10).textMatches(/.*(领取)?淘?金币.*/).drawingOrder(0).clickable(true).longClickable(false);
+        if (btn.find().length > 1)
+            btn.findOne().click();
+        sleep(1500);
     }
 
     PerformClick(taskBtn, taskName) {
@@ -108,6 +112,7 @@ class GoldCoins extends Task {
         // 防止淘宝骚操作，若返回主界面，尝试重新进入活动界面
         this.checkAndGoActivity();
     }
+
 }
 
 export default GoldCoins

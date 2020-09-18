@@ -42,7 +42,7 @@ function clickText(str) {
     var reg = str instanceof RegExp ? str : new RegExp(".*" + str + ".*");
     var btn = class_name ? className(class_name).textMatches(reg) : textMatches(reg);
     if (btn.exists()) {
-        log("\u70B9\u51FB\u3010" + reg + "\u3011\u6309\u94AE");
+        log("\u70B9\u51FB\u3010" + reg + "\u3011\u6309\u94AE(" + btn.find().length + ")");
         btn.findOnce().click();
         sleep(2000);
     } else {

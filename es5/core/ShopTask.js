@@ -42,7 +42,7 @@ var ShopTask = function (_Task) {
             var _this = this;
             sleep(4000);
             if (isOnCorrectPage()) return;
-
+            log(currentActivity());
             switch (currentActivity()) {
                 case this.Home_Activity:
                     (0, _log.ShowMessage)("在主页，准备跳至淘金币页...");
@@ -51,7 +51,9 @@ var ShopTask = function (_Task) {
                     (0, _log.ShowMessage)("已跳至淘金币页！");
                 case this.Coins_Activity:
                     (0, _log.ShowMessage)("在淘金币页，准备跳至任务页...");
-                    className("android.view.View").depth(10).drawingOrder(0).find().get(1).child(0).click();
+                    className("android.view.View").depth(10).drawingOrder(0).clickable(false).find().filter(function (e) {
+                        return e.childCount() === 1;
+                    })[1].child(0).click();
                     (0, _log.ShowMessage)("已跳至任务页！");
                     break;
                 default:
