@@ -1,6 +1,6 @@
-import Task, { debug } from "./Task";
-import { ShowMessage } from "../utils/log";
-import { endApp, launchOpenApp, clickText } from "../utils/appUtils";
+import Task, {debug} from "./Task";
+import {ShowMessage} from "../utils/log";
+import {endApp, launchOpenApp, clickText} from "../utils/appUtils";
 
 
 class GoldCoins extends Task {
@@ -58,7 +58,7 @@ class GoldCoins extends Task {
         taskName = Action.child(0).child(0).text();
         taskName = taskName.substring(0, taskName.length - 5);
         taskText = Action.child(0).child(1).text();
-        return { taskBtn, taskName, taskText }
+        return {taskBtn, taskName, taskText}
     }
 
     doTask(taskBtn, taskText, taskName, repeatCallback) {
@@ -97,6 +97,7 @@ class GoldCoins extends Task {
         if (btn.find().length > 1)
             btn.findOne().click();
         sleep(1500);
+        this.go_back();
     }
 
     PerformClick(taskBtn, taskName) {

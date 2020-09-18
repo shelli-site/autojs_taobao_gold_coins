@@ -129,6 +129,7 @@ var GoldCoins = function (_Task) {
             var btn = className("android.widget.Button").depth(10).textMatches(/.*(领取)?淘?金币.*/).drawingOrder(0).clickable(true).longClickable(false);
             if (btn.find().length > 1) btn.findOne().click();
             sleep(1500);
+            this.go_back();
         }
     }, {
         key: "PerformClick",

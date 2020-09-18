@@ -212,34 +212,7 @@ class Task {
             return
         }
     }
-    
-    /**
-     * 返回
-     */
-    go_back() {
-        let activity = currentActivity();
-        back();
-        sleep(1500);
-        let _activity = currentActivity();
-        if (activity === _activity) {
-            let back_btns = textMatches(".*(返回|离开|淘宝).*").find();
-            if (back_btns.nonEmpty()) {
-                if (back_btns.findOne(textMatches(".*(返回|离开).*")) != null) {
-                    back_btns.findOne(textMatches(".*(返回|离开).*")).click();
-                } else if (back_btns.findOne(textMatches(".*淘宝.*")) != null) {
-                    back_btns.findOne(textMatches(".*淘宝.*")).click();
-                }
-            } else {
-                toast("没找到╭(╯^╰)╮");
-                endApp(this.packageName);
-                sleep(1000);
-                launchOpenApp(this.packageName);
-                sleep(1000);
-            }
-        } else {
-            return
-        }
-    }
+
 }
 
 export default Task;
